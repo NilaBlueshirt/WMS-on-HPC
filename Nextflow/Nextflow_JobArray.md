@@ -127,6 +127,7 @@ memory per node --> can support the queueSize
 Array size = 2000
 ```
 
-Links
+Related Links
+
 https://training.nextflow.io/latest/nextflow_run/03_config/#4-manage-workflow-parameters
 https://www.nextflow.io/docs/latest/reference/process.html#array
