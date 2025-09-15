@@ -86,21 +86,21 @@ Using `nextflow.config` to control the workflow settings:
 ```groovy
 // Nextflow config for lastz jobs
 executor {
-   queueSize = 10000                   # default: 100, how many living jobs (pending or running) slurm will hold all the time for a main job, nextflow dev is working on fixing some small bugs around this param.
-   retry.maxAttempt = 3                # default: 3, for slurm to resubmit any jobs.
-   killBatchSize = 1000000             # default: 100
+   queueSize = 10000                   // default: 100, how many living jobs (pending or running) slurm will hold all the time for a main job, nextflow dev is working on fixing some small bugs around this param.
+   retry.maxAttempt = 3                // default: 3, for slurm to resubmit any jobs.
+   killBatchSize = 1000000             // default: 100
 }
 
 process {
-    executor = 'slurm'                 # using "local" on a single node will mimic the workstation setting      
-    memory = { 4.GB * task.attempt }   # dynamic allocation
-    time = { 1.hour * task.attempt }   # dynamic allocation
+    executor = 'slurm'                 // using "local" on a single node will mimic the workstation setting      
+    memory = { 4.GB * task.attempt }   // dynamic allocation
+    time = { 1.hour * task.attempt }   // dynamic allocation
     queue = 'public'
     cpus = 1
-    array = 2000                       # how many sub-jobs a job array will hold, must be int, cannot be a variable
-    maxRetries = 5                     # for nextflow to retry a child job.
+    array = 2000                       // how many sub-jobs a job array will hold, must be int, cannot be a variable
+    maxRetries = 5                     // for nextflow to retry a child job.
     errorStrategy = 'retry'
-    maxErrors = '-1'                   # total errors a job step can have, "-1" to be unlimited
+    maxErrors = '-1'                   // total errors a job step can have, "-1" to be unlimited
 }
 ```
 3. How to calculate the queueSize and the array size
