@@ -26,7 +26,7 @@ Below is an example for how a multi-step Nextflow-based workflow interacts with 
 
    Below is an example for how a child job can crash the main job (many ways).
 
-   <img src="./figures/fig4_error.png" alt="image info" width="80%">
+<img src="./figures/fig4_error.png" alt="image info" width="80%">
 
 
 
@@ -38,8 +38,8 @@ Below is an example for how a multi-step Nextflow-based workflow interacts with 
   
    Because the fairshare score will drop to zero very fast, so the child jobs have to use the backfilling mechanism of Slurm.
    
-   ![image info](./figures/fig6_devfairshare1.png)
-   ![image info](./figures/fig7_phxfairshare.png)
+![image info](./figures/fig6_devfairshare1.png)
+![image info](./figures/fig7_phxfairshare.png)
    
 3. Retry mechanism
     1. Retry on the `140` error code for “not enough resources”
@@ -53,7 +53,7 @@ Below is an example for how a multi-step Nextflow-based workflow interacts with 
 7. Consider Phx for CPU-intensive workflow
    Below is a screenshot of the Phx supercomputer when an efficient Nextflow workflow was running and taking up most of the public CPU nodes.
    
-   ![image info](./figures/fig3_dashboard.png)
+![image info](./figures/fig3_dashboard.png)
 
 
 ## Benchmarking Results for using or not using the Job Array feature
