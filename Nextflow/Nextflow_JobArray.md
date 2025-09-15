@@ -1,7 +1,7 @@
-   ---
-   layout: default
-   title: Nextflow Job Array Guide
-   ---
+---
+layout: default
+title: Nextflow with Slurm Job Array
+---
    
 ## Nextflow on a shared HPC Cluster
 
