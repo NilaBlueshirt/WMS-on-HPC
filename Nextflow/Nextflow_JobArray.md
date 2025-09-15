@@ -53,8 +53,15 @@ Below is an example for how a multi-step Nextflow-based workflow interacts with 
 
 
 ## Benchmarking Results for using or not using the Job Array feature
+
+Below is the total job walltime measured on the main job.
 ![image info](./figures/fig4_walltime.png)
+
+Below is the slurm stress level (slurm cycles) on a private cluster:
+    - purple line: without job array
+    - green: with job array
 ![image info](./figures/fig8_devslurmcycle.png)
+
 
 ## Coding Example
 
