@@ -83,23 +83,36 @@ Using `nextflow.config` to control the workflow settings:
 1. Edit the config file directly
 2. Use a Python wrapper to generate a config file
 
-```
+```groovy
 // Nextflow config for lastz jobs
 executor {
-   queueSize = 2000         # default is 100 for grid executor like slurm
-   retry.maxAttempt = 3     # default is 3
-   killBatchSize = 1000000  # default is 100 for slurm
+   queueSize = 10000                   # default: 100, how many living jobs (pending or running) slurm will hold all the time for a main job, nextflow dev is working on fixing some small bugs around this param.
+   retry.maxAttempt = 3                # default: 3, for slurm to resubmit any jobs.
+   killBatchSize = 1000000             # default: 100
 }
 
 process {
-    executor = 'slurm'
-    memory = { 16.GB * task.attempt }
-    time = { 1.hour * task.attempt }
+    executor = 'slurm'                 # using "local" on a single node will mimic the workstation setting      
+    memory = { 4.GB * task.attempt }  # dynamic allocation
+    time = { 1.hour * task.attempt }   # dynamic allocation
     queue = 'public'
     cpus = 1
-    array = 2000
-    maxRetries = 5
+    array = 2000                       # how many sub-jobs a job array will hold, must be int, cannot be a variable
+    maxRetries = 5                     # for nextflow to retry a child job.
     errorStrategy = 'retry'
-    maxErrors = '-1'
+    maxErrors = '-1'                   # total errors a job step can have, "-1" to be unlimited
 }
+```
+3. How to calculate the queueSize and the array size
+
+```
+Phx cluster
+
+public/public, pc[005-337]
+total CPU = 333*28 = 9324 --> queueSize = 10000
+memory per node --> can support the queueSize
+	122G/4 = 30 jobs, 30 jobs * 293 = 8790 jobs
+	249G/4 * 36 = 62 * 36 = 2232 jobs
+	184G/4 * 4 = 46 * 4 = 184 jobs
+Array size = 2000
 ```
