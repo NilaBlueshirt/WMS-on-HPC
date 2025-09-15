@@ -66,7 +66,7 @@ Source: [USRSE'25 paper](https://zenodo.org/records/17118383)
 - Submit child jobs in batches of job arrays
 
 
-5. Gracefully end the failed child jobs
+5. Gracefully end the child jobs
 - Send the end [signal](https://slurm.schedmd.com/sbatch.html) before the due time
 - Usually default, but the [clusterOptions](https://www.nextflow.io/docs/latest/reference/process.html#clusteroptions) param can cause problem.
 
