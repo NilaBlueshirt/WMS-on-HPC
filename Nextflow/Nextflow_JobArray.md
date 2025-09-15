@@ -145,5 +145,5 @@ Array size = 2000
 
 Related Links
 
-https://training.nextflow.io/latest/nextflow_run/03_config/#4-manage-workflow-parameters
-https://www.nextflow.io/docs/latest/reference/process.html#array
+[Nextflow official training doc](https://training.nextflow.io/latest/nextflow_run/03_config/#4-manage-workflow-parameters)
+[Nextflow doc](https://www.nextflow.io/docs/latest/reference/process.html#array)
