@@ -34,8 +34,7 @@ jobs:
           
           # Create Jekyll config
           cat > _site_source/_config.yml << 'EOF'
-          title: WMS on HPC - Nextflow Documentation
-          description: Nextflow Job Array Documentation
+          title: WMS on HPC - Nextflow with Slurm Job Array
           baseurl: "/WMS-on-HPC"
           url: "https://nilablueshirt.github.io"
           EOF
