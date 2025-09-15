@@ -3,8 +3,8 @@
 Nextflow acts as a middle layer between the user and the job scheduler Slurm. 
 
 Below is an example for how a multi-step Nextflow-based workflow interacts with Slurm.
-![image info](./figures/fig2_sequence.png)
-
+(source: USRSE'25 paper, link coming soon!)
+<img src="./figures/fig2_sequence.png" alt="image info" width="50%">
 
 
 
