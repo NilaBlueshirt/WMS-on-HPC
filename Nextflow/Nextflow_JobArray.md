@@ -8,9 +8,9 @@ title: Nextflow with Slurm Job Array
 Nextflow acts as a middle layer between the user and the job scheduler Slurm. Nextflow v24.04.0 and newer offers native support for job array for grid schedulers, but it's an "experimental" feature as stated on the official doc.
 
 Terms:
-- Task vs Process
-- Main job vs Child job
-- Job array, main job vs Sub job, array job
+- Process vs. Task
+- Main job vs. Child job
+- Job array, main job vs. Sub job, array job
 
 Below is an example for how a multi-step Nextflow-based workflow interacts with Slurm.
 (source: USRSE'25 paper, link coming soon!)
