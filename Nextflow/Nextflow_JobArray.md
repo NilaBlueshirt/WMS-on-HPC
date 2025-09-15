@@ -45,39 +45,50 @@ Below is an example for how a multi-step Nextflow-based workflow interacts with 
 1. Reduce child job size (time, memory, cores)
 - Similar to finding the appropriate amount of resources for a job/ job array
 - `seff`
+
 Because the fairshare score will drop to zero very fast, so the child jobs have to use the backfilling mechanism of Slurm.
 
 ![image info](./figures/fig6_devfairshare1.png)
 ![image info](./figures/fig7_phxfairshare.png)
-   
+
+
 2. Retry mechanism
 - Retry on the `140` error code for “not enough resources”
 - Retry 3 times regardless of the error code
-       
+
+
 3. Dynamic resource allocation
 - Retry with more resources
-       
+
+
 4. Enable the report & job array feature
 - Produce job statistics reports for each job step → help #1
 - Submit child jobs in batches of job arrays
-       
+
+
 5. Gracefully end the failed child jobs
 - Send the end signal before the due time
-   
-6. Consider Phx for CPU-intensive workflow
+
+
+6. Reduce queueSize and array size during test runs
+
+
+7. Consider Phx for CPU-intensive workflow
    
    Below is a screenshot of the Phx supercomputer when an efficient Nextflow workflow was running and taking up most of the public CPU nodes.
    
 ![image info](./figures/fig3_dashboard.png)
 
 
+
 ## Benchmarking Results for using or not using the Job Array feature
 
-Below is the total job walltime measured on the main job.
+1. Below is the total job walltime measured on the main job.
 
 ![image info](./figures/fig4_walltime.png)
 
-Below is the slurm stress level (slurm cycles) on a private cluster:
+
+2. Below is the slurm stress level (slurm cycles) on a private cluster:
 
 - purple line: without job array
     
@@ -114,6 +125,8 @@ process {
     clusterOptions = '--signal=USR2@180'  // early stop
 }
 ```
+
+
 3. How to calculate the queueSize and the array size
 
 ```
@@ -127,6 +140,7 @@ memory per node --> can support the queueSize
 	184G/4 * 4 = 46 * 4 = 184 jobs
 Array size = 2000
 ```
+
 
 Related Links
 
