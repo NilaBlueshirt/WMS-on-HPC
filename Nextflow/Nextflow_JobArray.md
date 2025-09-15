@@ -86,9 +86,9 @@ Using `nextflow.config` to control the workflow settings:
 ```groovy
 // Nextflow config for lastz jobs
 executor {
-   queueSize = 10000                   // default: 100, how many living jobs (pending or running) slurm will hold all the time for a main job, nextflow dev is working on fixing some small bugs around this param.
-   retry.maxAttempt = 3                // default: 3, for slurm to resubmit any jobs.
-   killBatchSize = 1000000             // default: 100
+	queueSize = 10000                   // default: 100, how many living jobs (pending or running) slurm will hold all the time for a main job, nextflow dev is working on fixing some small bugs around this param.
+    retry.maxAttempt = 3                // default: 3, for slurm to resubmit any jobs.
+    killBatchSize = 1000000             // default: 100
 }
 
 process {
