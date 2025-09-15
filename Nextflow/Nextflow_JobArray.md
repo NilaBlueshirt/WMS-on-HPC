@@ -2,10 +2,15 @@
 layout: default
 title: Nextflow with Slurm Job Array
 ---
-   
+
 ## Nextflow on a shared HPC Cluster
 
-Nextflow acts as a middle layer between the user and the job scheduler Slurm. 
+Nextflow acts as a middle layer between the user and the job scheduler Slurm. Nextflow v24.04.0 and newer offers native support for job array for grid schedulers, but it's an "experimental" feature as stated on the official doc.
+
+Terms:
+- Task vs Process
+- Main job vs Child job
+- Job array, main job vs Sub job, array job
 
 Below is an example for how a multi-step Nextflow-based workflow interacts with Slurm.
 (source: USRSE'25 paper, link coming soon!)
@@ -25,7 +30,7 @@ Below is an example for how a multi-step Nextflow-based workflow interacts with 
     → main job crashes due to timeout
     
 
-1. Intolerance of the child job failures
+2. Intolerance of the child job failures
     
     → main job crashes
 
@@ -38,24 +43,29 @@ Below is an example for how a multi-step Nextflow-based workflow interacts with 
 ## Solution / Best Practices
 
 1. Reduce child job size (time, memory, cores)
-    1. Similar to finding the appropriate amount of resources for a job
-    2. `seff`
-  
-   Because the fairshare score will drop to zero very fast, so the child jobs have to use the backfilling mechanism of Slurm.
-   
+- Similar to finding the appropriate amount of resources for a job/ job array
+- `seff`
+Because the fairshare score will drop to zero very fast, so the child jobs have to use the backfilling mechanism of Slurm.
+
 ![image info](./figures/fig6_devfairshare1.png)
 ![image info](./figures/fig7_phxfairshare.png)
    
-3. Retry mechanism
-    1. Retry on the `140` error code for “not enough resources”
-    2. Retry 3 times regardless of the error code
-4. Dynamic resource allocation
-    1. Retry with more resources
-5. Enable the report & job array feature
-    1. Produce job statistics reports for each job step → help #1
-    2. Submit child jobs in batches of job arrays
-6. Gracefully end the failed child jobs
-7. Consider Phx for CPU-intensive workflow
+2. Retry mechanism
+- Retry on the `140` error code for “not enough resources”
+- Retry 3 times regardless of the error code
+       
+3. Dynamic resource allocation
+- Retry with more resources
+       
+4. Enable the report & job array feature
+- Produce job statistics reports for each job step → help #1
+- Submit child jobs in batches of job arrays
+       
+5. Gracefully end the failed child jobs
+- Send the end signal before the due time
+   
+6. Consider Phx for CPU-intensive workflow
+   
    Below is a screenshot of the Phx supercomputer when an efficient Nextflow workflow was running and taking up most of the public CPU nodes.
    
 ![image info](./figures/fig3_dashboard.png)
@@ -116,3 +126,7 @@ memory per node --> can support the queueSize
 	184G/4 * 4 = 46 * 4 = 184 jobs
 Array size = 2000
 ```
+
+Links
+https://training.nextflow.io/latest/nextflow_run/03_config/#4-manage-workflow-parameters
+https://www.nextflow.io/docs/latest/reference/process.html#array
