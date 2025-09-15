@@ -5,7 +5,7 @@ title: Nextflow with Slurm Job Array
 
 ## Nextflow on a shared HPC Cluster
 
-Nextflow acts as a middle layer between the user and the job scheduler Slurm. Nextflow v24.04.0 and newer offers native support for job array for grid schedulers, but it's an "experimental" feature as stated on the official doc.
+Nextflow acts as a middle layer between the user and the job scheduler Slurm. Nextflow v24.04.0 and newer offers native support for job array for grid schedulers, but it's an "experimental" feature as stated on their doc and still under development.
 
 Terms:
 - Process vs. Task
@@ -13,7 +13,7 @@ Terms:
 - Job array, main job vs. Sub job, array job
 
 Below is an example for how a multi-step Nextflow-based workflow interacts with Slurm.
-(source: USRSE'25 paper, link coming soon!)
+Source: [USRSE'25 paper](https://zenodo.org/records/17118383)
 
 <img src="./figures/fig2_sequence.png" alt="image info" width="50%">
 
@@ -28,6 +28,11 @@ Below is an example for how a multi-step Nextflow-based workflow interacts with 
     → increased time for the main job
     
     → main job crashes due to timeout
+
+   Because the fairshare score will drop to zero very fast, so the child jobs have to use the backfilling mechanism of Slurm.
+
+![image info](./figures/fig6_devfairshare1.png)
+![image info](./figures/fig7_phxfairshare.png)
     
 
 2. Intolerance of the child job failures
@@ -45,11 +50,6 @@ Below is an example for how a multi-step Nextflow-based workflow interacts with 
 1. Reduce child job size (time, memory, cores)
 - Similar to finding the appropriate amount of resources for a job/ job array
 - `seff`
-
-Because the fairshare score will drop to zero very fast, so the child jobs have to use the backfilling mechanism of Slurm.
-
-![image info](./figures/fig6_devfairshare1.png)
-![image info](./figures/fig7_phxfairshare.png)
 
 
 2. Retry mechanism
