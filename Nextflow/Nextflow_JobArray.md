@@ -93,7 +93,7 @@ executor {
 
 process {
     executor = 'slurm'                 # using "local" on a single node will mimic the workstation setting      
-    memory = { 4.GB * task.attempt }  # dynamic allocation
+    memory = { 4.GB * task.attempt }   # dynamic allocation
     time = { 1.hour * task.attempt }   # dynamic allocation
     queue = 'public'
     cpus = 1
