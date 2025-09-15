@@ -34,6 +34,7 @@ jobs:
           mkdir -p _site/figures
           cp Nextflow/Nextflow_JobArray.md _site/index.md
           cp Nextflow/figures/* _site/figures/
+          touch _site/.nojekyll
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
