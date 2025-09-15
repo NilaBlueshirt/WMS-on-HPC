@@ -32,9 +32,8 @@ jobs:
       - name: Prepare Artifact
         run: |
           mkdir -p _site/figures
-          cp Nextflow/Nextflow_JobArray.md _site/index.md
-          cp Nextflow/figures/* _site/figures/
-          touch _site/.nojekyll
+          cp WMS-on-HPC/Nextflow/Nextflow_JobArray.md _site/index.md
+          cp WMS-on-HPC/Nextflow/figures/* _site/figures/
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
