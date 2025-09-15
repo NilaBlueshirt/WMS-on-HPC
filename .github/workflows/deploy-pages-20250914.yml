@@ -8,6 +8,12 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+# Add the permissions block here
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 # Allow one concurrent deployment
 concurrency:
   group: "pages"
@@ -23,7 +29,6 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
-      # Critial Step: Copy your specific file to the root of the artifact
       - name: Prepare Artifact
         run: |
           mkdir -p _site
@@ -32,7 +37,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '_site' # The folder with your prepared file
+          path: '_site'
 
       - name: Deploy to GitHub Pages
         id: deployment
