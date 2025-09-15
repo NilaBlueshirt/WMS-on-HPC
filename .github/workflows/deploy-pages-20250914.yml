@@ -1,0 +1,39 @@
+name: Deploy GitHub Pages
+
+on:
+  # Runs on pushes to the main branch
+  push:
+    branches: ["main"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Allow one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      # Critial Step: Copy your specific file to the root of the artifact
+      - name: Prepare Artifact
+        run: |
+          mkdir -p _site20250914
+          cp Nextflow/Nextflow_JobArray.md _site20250914/index.md
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site20250914' # The folder with your prepared file
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
