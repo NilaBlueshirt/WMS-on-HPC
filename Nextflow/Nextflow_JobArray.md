@@ -37,6 +37,7 @@ Below is an example for how a multi-step Nextflow-based workflow interacts with 
     2. `seff`
   
    Because the fairshare score will drop to zero very fast, so the child jobs have to use the backfilling mechanism of Slurm.
+   
    ![image info](./figures/fig6_devfairshare1.png)
    ![image info](./figures/fig7_phxfairshare.png)
    
@@ -51,17 +52,20 @@ Below is an example for how a multi-step Nextflow-based workflow interacts with 
 6. Gracefully end the failed child jobs
 7. Consider Phx for CPU-intensive workflow
    Below is a screenshot of the Phx supercomputer when an efficient Nextflow workflow was running and taking up most of the public CPU nodes.
+   
    ![image info](./figures/fig3_dashboard.png)
 
 
 ## Benchmarking Results for using or not using the Job Array feature
 
 Below is the total job walltime measured on the main job.
+
 ![image info](./figures/fig4_walltime.png)
 
 Below is the slurm stress level (slurm cycles) on a private cluster:
     - purple line: without job array
     - green: with job array
+    
 ![image info](./figures/fig8_devslurmcycle.png)
 
 
