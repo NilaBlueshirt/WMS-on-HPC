@@ -67,7 +67,8 @@ Because the fairshare score will drop to zero very fast, so the child jobs have 
 
 
 5. Gracefully end the failed child jobs
-- Send the end signal before the due time
+- Send the end [signal](https://slurm.schedmd.com/sbatch.html) before the due time
+- Usually default, but the [clusterOptions](https://www.nextflow.io/docs/latest/reference/process.html#clusteroptions) param can cause problem.
 
 
 6. Reduce queueSize and array size during test runs
