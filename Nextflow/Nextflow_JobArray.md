@@ -4,6 +4,7 @@ Nextflow acts as a middle layer between the user and the job scheduler Slurm.
 
 Below is an example for how a multi-step Nextflow-based workflow interacts with Slurm.
 (source: USRSE'25 paper, link coming soon!)
+
 <img src="./figures/fig2_sequence.png" alt="image info" width="50%">
 
 
@@ -24,7 +25,8 @@ Below is an example for how a multi-step Nextflow-based workflow interacts with 
     → main job crashes
 
    Below is an example for how a child job can crash the main job (many ways).
-   ![image info](./figures/fig4_error.png)
+
+   <img src="./figures/fig4_error.png" alt="image info" width="80%">
 
 
 
