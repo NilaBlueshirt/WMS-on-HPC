@@ -1,3 +1,8 @@
+   ---
+   layout: default
+   title: Nextflow Job Array Guide
+   ---
+   
 ## Nextflow on a shared HPC Cluster
 
 Nextflow acts as a middle layer between the user and the job scheduler Slurm. 
