@@ -5,14 +5,14 @@ title: Nextflow with Slurm Job Array
 
 ## Nextflow on a shared HPC Cluster
 
-Nextflow acts as a middle layer between the user and the job scheduler Slurm. Nextflow v24.04.0 and newer offers native support for job array for grid schedulers, but it's an "experimental" feature as stated on their doc and still under development.
+Nextflow acts as a middle layer between the user and the job scheduler Slurm. Nextflow v24.04.0 and newer offers native support for job arrays for grid schedulers, but it's an "experimental" feature as stated on their doc and still under development.
 
 Terms:
 - Process vs. Task
 - Main job vs. Child job
 - Job array, main job vs. Sub job, array job
 
-Below is an example for how a multi-step Nextflow-based workflow interacts with Slurm.
+Below is an example of how a multi-step Nextflow-based workflow interacts with Slurm.
 Source: [USRSE'25 paper](https://zenodo.org/records/17118383)
 
 <img src="./figures/fig2_sequence.png" alt="image info" width="50%">
@@ -39,7 +39,7 @@ Source: [USRSE'25 paper](https://zenodo.org/records/17118383)
     
     → main job crashes
 
-   Below is an example for how a child job can crash the main job (many ways).
+   Below is an example of how a child job can crash the main job (many ways).
 
 <img src="./figures/fig4_error.png" alt="image info" width="80%">
 
@@ -86,7 +86,7 @@ Source: [USRSE'25 paper](https://zenodo.org/records/17118383)
 
 1. Below is the total job walltime measured on the main job.
 
-![image info](./figures/fig4_walltime.png)
+![image info](./figures/job_time.png)
 
 
 2. Below is the slurm stress level (slurm cycles) on a private cluster:
@@ -108,7 +108,7 @@ Using `nextflow.config` to control the workflow settings:
 ```groovy
 // Nextflow config for lastz jobs
 executor {
-    queueSize = 10000                     // default: 100, how many living jobs (pending or running) slurm will hold all the time for a main job, nextflow dev is working on fixing some small bugs around this param.
+    queueSize = 10000                     // default: 100, how many living jobs (pending or running) slurm will hold all the time for a main job. Nextflow dev is working on fixing some small bugs around this parameter.
     retry.maxAttempt = 3                  // default: 3, for slurm to resubmit any jobs.
     killBatchSize = 1000000               // default: 100
 }
@@ -143,7 +143,12 @@ Array size = 2000
 ```
 
 
-Related Links
+## Related Links
+
+[USRSE'25 paper](https://zenodo.org/records/17118383)
+
+[Implementation of make_lastz_chains on the Phx cluster](https://github.com/NilaBlueshirt/make_lastz_chains_onPhx)
 
 [Nextflow official training doc](https://training.nextflow.io/latest/nextflow_run/03_config/#4-manage-workflow-parameters)
+
 [Nextflow doc](https://www.nextflow.io/docs/latest/reference/process.html#array)
