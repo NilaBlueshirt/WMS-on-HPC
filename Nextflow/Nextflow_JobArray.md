@@ -145,6 +145,8 @@ Array size = 2000
 
 ## Related Links
 
+[make_lastz_chains](https://github.com/hillerlab/make_lastz_chains)
+
 [USRSE'25 paper](https://zenodo.org/records/17118383)
 
 [Implementation of make_lastz_chains on the Phx cluster](https://github.com/NilaBlueshirt/make_lastz_chains_onPhx)
