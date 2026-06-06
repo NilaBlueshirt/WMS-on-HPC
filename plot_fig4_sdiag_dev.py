@@ -1,44 +1,13 @@
 #!/usr/bin/env python3
-"""plot_fig4_sdiag_dev.py — Slurm controller-side load on the Dev cluster.
+"""plot_fig4_sdiag_dev.py — Slurm controller-side load on the Dev cluster (time series).
 
-Companion to plot_fig3_sdiag_ecdf.py (Phoenix ECDF). Dev is a single-user
-cluster, so cluster-global sdiag counters are directly attributable to
-the workflow under test --- no co-tenancy to disentangle. The figure
-therefore uses a time-series view (the right lens for attribution) with
-the three configurations as the categorical axis rather than the three
-measurement blocks.
-
-Each configuration is a single co-tenancy-free reference run windowed to
-the LASTZ stage (the dominant submission wave), with per-user Fairshare
-(and sdiag counters) reset beforehand. No rolling
-smoothing is applied: on a single-user cluster the trace is the
-workflow's own attributable controller load, not a mixture with
-co-tenant traffic, so the raw rates are the honest view and a repeat of
-the same input would reproduce them.
-
-Panels (same metrics as the Phoenix sdiag figures):
-  (a) Main schedule cycles/min      -- Delta(`Total cycles`) per minute
-  (b) Backfill last-cycle latency   -- `Last cycle` (us -> s), snapshot
-  (c) Submit RPC rate (per minute)  -- Delta(`REQUEST_SUBMIT_BATCH_JOB count`)
-  (d) Polling RPC rate (per minute) -- Delta(`REQUEST_JOB_INFO_SINGLE` +
-                                      `REQUEST_JOB_USER_INFO`)
-
-For each metric panel: one bold curve per configuration (the single
-reference run), distinguished by the shared legend (no per-line labels).
-If several runs per configuration are supplied, the panel falls back to
-thin per-sample curves plus a bold per-config average, matching the
-Phoenix convention.
-
-All series are clipped to the first 24 h of run time, matching the
-uniform 24 h walltime cap applied across all configurations on both
-clusters.
+Same four sdiag metrics as the Phoenix figures, with the three configurations
+as the categorical axis. One bold curve per config (single reference run,
+LASTZ-windowed); falls back to thin-per-run + bold average if N>1. No
+smoothing. Clipped to the first 24 h.
 
 Expected layout:
-    bench/dev/sample1/original/sdiag/sdiag_<unixtime>.txt
-    bench/dev/sample1/jobarray/sdiag/sdiag_<unixtime>.txt
-    bench/dev/sample1/refactor/sdiag/sdiag_<unixtime>.txt
-    bench/dev/sample2/...
-    bench/dev/sample3/...
+    bench/dev/sample1/{original,jobarray,refactor}/sdiag/sdiag_<unixtime>.txt
 
 usage: plot_fig4_sdiag_dev.py [bench_root] [out.png]
        defaults: bench  fig_sdiag_dev.png
@@ -83,9 +52,8 @@ CUTOFF_H = 24.0   # uniform 24 h walltime cap (no smoothing -- raw rates)
 
 def load_raw(sdiag_dir):
     """sdiag_*.txt -> DataFrame with rel_h, main_cpm, bf_last_s, submit_rpm,
-    polling_rpm. No rolling smoothing. Cumulative counters differentiated
-    between consecutive samples; negative deltas (would indicate a reset
-    mid-window, which the per-run reset rule precludes) are dropped."""
+    polling_rpm. No smoothing. Cumulative counters differentiated between
+    consecutive samples; negative deltas dropped."""
     rows = []
     for f in sorted(Path(sdiag_dir).glob("sdiag_*.txt")):
         parsed = parse_sdiag_file(f)
@@ -135,12 +103,9 @@ def collect_dev(root):
 
 
 def average_curve(curves, col, n_grid=400):
-    """Pointwise average of metric `col` across N runs on a common x-grid
-    spanning [0, min(per-run endpoint, CUTOFF_H)]. Truncated to the
-    shortest run so the average is computed only where every run has
-    data. Returns (x_grid, y_avg, avg_endpoint_x), where avg_endpoint_x
-    is the mean of per-run endpoint x's --- the honest position for the
-    average-walltime label."""
+    """Pointwise average of metric `col` across N runs on a common x-grid,
+    truncated to the shortest run (computed only where every run has data).
+    Returns (x_grid, y_avg, avg_endpoint_x = mean of per-run endpoint x's)."""
     endpoints = [float(c["rel_h"].iloc[-1]) for c in curves if not c.empty]
     if not endpoints:
         return np.array([]), np.array([]), 0.0
@@ -167,11 +132,8 @@ PANELS = [
 
 
 def _draw_panel(ax, dev_runs, col):
-    """One sdiag metric panel. With a single reference run per
-    configuration (N=1), each config is one bold curve labelled with its
-    walltime at the endpoint. If several runs are supplied (N>1), they are
-    drawn as thin per-sample curves plus a bold per-config average, matching
-    the Phoenix convention."""
+    """One sdiag metric panel: one bold curve per config (N=1), or thin
+    per-run curves + a bold per-config average when N>1."""
     any_drawn = False
     for cfg in CONFIG_ORDER:
         runs = dev_runs.get(cfg, [])
@@ -196,9 +158,8 @@ def _draw_panel(ax, dev_runs, col):
             ax.plot(df["rel_h"], df[col], color=dark, lw=2.4,
                     label=f"{CONFIG_LABELS[cfg]}")
 
-    # Rates are non-negative; pin y=0 to the x-axis. Dev has no burst tail,
-    # so a linear axis is the honest view (symlog would draw a misleading
-    # negative band beneath the near-zero Original/Job Array polling curves).
+    # Rates are non-negative; pin y=0. Linear axis (Dev has no burst tail
+    # that would warrant symlog).
     ax.set_ylim(bottom=0)
     ax.grid(True, alpha=0.3)
     return any_drawn
@@ -210,10 +171,8 @@ def main():
         print(f"skipped {OUT}: no Dev sdiag data found under {ROOT/'dev'}")
         return
 
-    # Dev runs are windowed to the short LASTZ stage; fit the shared x-axis
-    # to the data span so the curves fill the panels (the 24 h cap would
-    # otherwise squeeze them into the far left). Matplotlib then auto-picks
-    # tick spacing on the order of ~10 min for this range.
+    # Fit the shared x-axis to the (short LASTZ) data span so the curves
+    # fill the panels instead of being squeezed against the 24 h cap.
     all_x = [df["rel_h"].iloc[-1]
              for runs in dev.values() for _, df in runs if not df.empty]
     xmax = (max(all_x) * 1.08) if all_x else CUTOFF_H

@@ -1,29 +1,15 @@
 #!/usr/bin/env python3
-"""plot_fig3_sdiag.py — Slurm controller-side load on Phoenix \texttt{public}.
+"""plot_fig3_sdiag.py — Slurm controller-side load on Phoenix public (time series).
 
-Single figure, 2x2 panels, one per metric, three blocks overlaid.
-All four panels are cluster-global on Phx (includes other users); the
-useful comparison is block-to-block consistency.
+NOTE: unused/unpublished; kept because plot_fig3_sdiag_ecdf.py and
+plot_fig4_sdiag_dev.py import parse_sdiag_file (+ CUTOFF_MIN, PHX_SHADES).
 
-Panels:
-  (a) Main schedule cycles/min      — Δ(`Total cycles`) per minute
-  (b) Backfill last-cycle latency   — `Last cycle` (μs → s), snapshot
-  (c) Submit RPC rate (per minute)  — Δ(`REQUEST_SUBMIT_BATCH_JOB count`)
-  (d) Polling RPC rate (per minute) — Δ(`REQUEST_JOB_INFO_SINGLE` +
-                                      `REQUEST_JOB_USER_INFO`)
+2x2 panels, three blocks overlaid (10-min rolling-median smoothed,
+x clipped to first 24 h):
+  (a) main sched cycles/min    (c) submit RPC rate/min
+  (b) backfill last-cycle (s)  (d) polling RPC rate/min
 
-Cumulative counters (a/c/d) are differentiated between consecutive
-samples, so no `sdiag --reset` is required. Missing RPC entries are
-treated as 0 (sdiag omits unused RPC types from the table).
-
-Per-minute rates are smoothed with a 10-min time-based rolling median
-to suppress sampling-interval noise, and the x-axis is clipped to the
-first 24 h of each block's sampler window.
-
-Expected layout:
-    bench/phx/block1/sdiag/sdiag_<unixtime>.txt
-    bench/phx/block2/sdiag/sdiag_<unixtime>.txt
-    bench/phx/block3/sdiag/sdiag_<unixtime>.txt
+Expected layout: bench/phx/block{1,2,3}/sdiag/sdiag_<unixtime>.txt
 
 usage: plot_fig3_sdiag.py [bench_root] [out.png]
        defaults: bench  fig_sdiag.png

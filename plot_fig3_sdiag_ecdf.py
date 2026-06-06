@@ -1,31 +1,11 @@
 #!/usr/bin/env python3
-"""plot_fig3_sdiag_ecdf.py — Distributional view of Slurm controller-side load.
+"""plot_fig3_sdiag_ecdf.py — ECDF view of Phoenix controller-side load.
 
-Companion to ``plot_fig3_sdiag.py``. Same four cluster-global sdiag metrics
-on Phoenix \\texttt{public}, but each panel is an empirical CDF
-(F(x) = fraction of samples with metric ≤ x) per block instead of a
-time series. Distribution overlap across blocks is what justifies the
-block-averaged comparisons in Figs. 1–2 — i.e., this figure answers
-"how do we know your three measurement windows weren't on freakishly
-quiet/busy days on Phx?".
+Companion to plot_fig3_sdiag.py: same four cluster-global sdiag metrics on
+Phoenix public, but each 2x2 panel is an empirical CDF per block (built from
+raw per-sample values, no smoothing). Each block clipped to its first 24 h.
 
-Panels (same metrics, same units as the time-series Fig. 3):
-  (a) Main schedule cycles/min      — Δ(`Total cycles`) per minute
-  (b) Backfill last-cycle latency   — `Last cycle` (μs → s), snapshot
-  (c) Submit RPC rate (per minute)  — Δ(`REQUEST_SUBMIT_BATCH_JOB count`)
-  (d) Polling RPC rate (per minute) — Δ(`REQUEST_JOB_INFO_SINGLE` +
-                                      `REQUEST_JOB_USER_INFO`)
-
-Each block contributes one ECDF curve per panel built from its raw
-per-sample values (no rolling smoothing — distributions should be
-estimated from the underlying samples, not the smoothed trace).
-Each block is clipped to its first 24 h of sampler data (CUTOFF_MIN),
-matching the sister time-series figure.
-
-Expected layout (shared with plot_fig3_sdiag.py):
-    bench/phx/block1/sdiag/sdiag_<unixtime>.txt
-    bench/phx/block2/sdiag/sdiag_<unixtime>.txt
-    bench/phx/block3/sdiag/sdiag_<unixtime>.txt
+Expected layout: bench/phx/block{1,2,3}/sdiag/sdiag_<unixtime>.txt
 
 usage: plot_fig3_sdiag_ecdf.py [bench_root] [out.png]
        defaults: bench  fig_sdiag_ecdf.png
@@ -47,9 +27,7 @@ OUT  = Path(sys.argv[2]) if len(sys.argv) > 2 else Path("fig_sdiag_ecdf.png")
 
 
 def load_raw(sdiag_dir):
-    """Return DataFrame of raw per-sample rates over the first CUTOFF_MIN
-    minutes of the sampler window. No rolling smoothing — ECDFs need the
-    underlying samples, not a smoothed surrogate."""
+    """Raw per-sample rates over the first CUTOFF_MIN minutes (no smoothing)."""
     rows = []
     for f in sorted(Path(sdiag_dir).glob("sdiag_*.txt")):
         parsed = parse_sdiag_file(f)

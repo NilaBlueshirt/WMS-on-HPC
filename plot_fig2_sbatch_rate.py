@@ -121,12 +121,9 @@ def collect_dev(root):
 
 def _panel(ax, files, label_runs=True, label_walltime=True, fit_x=False):
     """One cumulative-sbatch panel: thin per-run curves + bold per-config
-    averages. `label_runs` toggles the "#<run>" labels on the thin per-run
-    curves (Phoenix only); `label_walltime` toggles the walltime label on
-    the bold curve(s), formatted "<h>h" to two decimals (Phoenix average,
-    Dev per-config). When fit_x=True the x-axis is fitted to the data span
-    so the short Dev curves fill the panel instead of being squeezed into
-    the left of the 24 h cap."""
+    averages. `label_runs` toggles the "#<run>" labels (Phoenix); `label_walltime`
+    toggles the "<h>h" walltime label; `fit_x` fits the x-axis to the data span
+    (Dev) instead of the 24 h cap."""
     any_drawn = False
     max_x = 0.0
     for cfg in CONFIG_ORDER:
@@ -147,14 +144,9 @@ def _panel(ax, files, label_runs=True, label_walltime=True, fit_x=False):
             ax.step(c.index, c.values, where="post", color=light, lw=1.8)
             max_x = max(max_x, float(c.index[-1]))
             if label_runs:
-                # The 3 per-block endpoints sit at nearly the same y on a
-                # log scale (~1.5% determinism), so labels must be
-                # vertically staggered, but a wide stagger detaches them
-                # from their lines. Instead stack them tightly just right
-                # of the cluster and draw a thin same-color leader line
-                # from each label back to its own endpoint — the leader
-                # carries the "who's who" association so the labels can
-                # stay packed.
+                # Endpoints nearly coincide on the log axis, so stack the
+                # labels tightly and draw a thin leader line back to each
+                # endpoint to keep the association.
                 rank = rank_by_orig[i]
                 dy_pts = -3 - 10 * rank
                 ax.annotate(
